@@ -16,7 +16,7 @@ load_dotenv(dotenv_path=dotenv_path)
 app = FastAPI()
 
 # Serve static files
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Enable CORS
 app.add_middleware(
@@ -37,7 +37,7 @@ rag_system.start_listener()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_auth():
-    with open("frontend/login.html", "r") as file:
+    with open("static/login.html", "r") as file:
         html_content = file.read()
     return HTMLResponse(content=html_content, status_code=200)
 

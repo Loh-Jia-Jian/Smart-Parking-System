@@ -1,7 +1,7 @@
 # Smart Parking System
 This project is for SMJE4383 Advanced Programming Project. This web application is developed using RAG to solve real-life applications with a relatively low cost of training models.
 
-##Start guide
+## Start guide
 First cd to your directory path and clone the repo to the path using:
 ```
 git clone https://github.com/Loh-Jia-Jian/Smart-Parking-System.git
@@ -14,6 +14,6 @@ docker build -t <your-application-name> .
 
 Run the docker on local host:
 ```
-docker run -p 4000:80 <your-application-name>
+docker run -p 8000:8000 <your-application-name>
 ```
 
