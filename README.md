@@ -3,11 +3,17 @@ This project is for SMJE4383 Advanced Programming Project. This web application 
 
 ##Start guide
 First cd to your directory path and clone the repo to the path using:
-> git clone https://github.com/Loh-Jia-Jian/Smart-Parking-System.git
+```
+git clone https://github.com/Loh-Jia-Jian/Smart-Parking-System.git
+```
 
 Create the docker image:
-> docker build -t <your-application-name> .
+```
+docker build -t <your-application-name> .
+```
 
 Run the docker on local host:
-> docker run -p 4000:80 <your-application-name>
+```
+docker run -p 4000:80 <your-application-name>
+```
 
