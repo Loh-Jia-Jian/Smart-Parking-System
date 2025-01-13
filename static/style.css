@@ -172,6 +172,36 @@ main p{
 
   h2, p { margin-top: 1em }
 }
+.profile-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--accent-clr);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-btn:hover {
+  background-color: #4a50f7; /* Slightly darker shade of the accent color */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.profile-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-btn + .profile-btn {
+  margin-left: 10px; /* Space between buttons */
+}
+
 
 @media(max-width: 800px){
   body{
