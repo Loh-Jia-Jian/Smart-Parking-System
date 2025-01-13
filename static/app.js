@@ -1,10 +1,8 @@
+const toggleButton = document.getElementById('toggleButton');
 const chatBody = document.getElementById("chatBody");
 const chatInput = document.getElementById("chatInput");
 const sidebar = document.getElementById('sidebar')
-
-toggleButton.addEventListener('click', () => {
-    chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
-});
+const chatbox = document.getElementById('chatbox');
 
 function toggleSidebar() {
     sidebar.classList.toggle('close')

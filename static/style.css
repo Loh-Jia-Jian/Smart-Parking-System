@@ -61,15 +61,46 @@ body{
   }
 }
 
-#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo {
   border-radius: .5em;
   padding: .85em;
   text-decoration: none;
   color: var(--text-clr);
   display: flex;
-  align-items: center;
-  gap: 1em;
+  align-items: center; /* This ensures text and icons align vertically */
+  gap: 1em; /* Consistent spacing between icons and text */
+  text-transform: capitalize; /* To capitalize the first letter of all text for consistency */
 }
+
+
+#sidebar .material-icons {
+  font-size: 24px; /* Consistent icon size */
+  flex-shrink: 0; /* Prevent icons from shrinking */
+  color: var(--text-clr); /* Match icon color with text */
+}
+
+#sidebar a[href="login.html"] .material-icons:hover,
+#sidebar a[href="login.html"] span:hover {
+    color: #fd5c63; /* Set text and icon color to red */
+}
+
+
+#sidebar a:hover, #sidebar .dropdown-btn:hover {
+  background-color: var(--hover-clr); /* Add hover effect */
+}
+
+#sidebar a span, #sidebar .dropdown-btn span {
+  flex-grow: 1; /* Ensure text spans the available space */
+}
+
+#sidebar ul li.active a {
+  color: var(--accent-clr); /* Highlight active item */
+}
+
+#sidebar ul li.active a .material-icons {
+  color: var(--accent-clr); /* Highlight active icon */
+}
+
 .dropdown-btn{
   width: 100%;
   text-align: left;
