@@ -17,3 +17,8 @@ Run the docker on local host:
 docker run -p 8000:8000 <your-application-name>
 ```
 
+### For developer
+Command to run the system on terminal
+```
+uvicorn app.main:app --reload
+```
