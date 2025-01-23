@@ -74,9 +74,17 @@ body{
 
 
 #sidebar .material-icons {
-  font-size: 24px; /* Consistent icon size */
-  flex-shrink: 0; /* Prevent icons from shrinking */
-  color: var(--text-clr); /* Match icon color with text */
+  font-size: 24px;
+  flex-shrink: 0;
+  color: var(--text-clr); /* Default icon color */
+}
+
+#sidebar ul li.active a .material-icons {
+  color: var(--accent-clr); /* Highlight active icon */
+}
+
+#sidebar a:hover .material-icons {
+  color: var(--hover-clr); /* Change icon color on hover */
 }
 
 #sidebar a[href="login.html"] .material-icons:hover,
@@ -203,75 +211,95 @@ main p{
 }
 
 
-@media(max-width: 800px){
-  body{
-    grid-template-columns: 1fr;
+@media(max-width: 800px) {
+  body {
+      grid-template-columns: 1fr;
   }
-  main{
-    padding: 2em 1em 60px 1em;
-  }
-  .container{
-    border: none;
-    padding: 0;
-  }
-  #sidebar{
-    height: 60px;
-    width: 100%;
-    border-right: none;
-    border-top: 1px solid var(--line-clr);
-    padding: 0;
-    position: fixed;
-    top: unset;
-    bottom: 0;
 
-    > ul{
+  main {
+      padding: 2em 1em 60px 1em;
+  }
+
+  .container {
+      border: none;
       padding: 0;
-      display: grid;
-      grid-auto-columns: 60px;
-      grid-auto-flow: column;
-      align-items: center;
-      overflow-x: scroll;
-    }
-    ul li{
-      height: 100%;
-    }
-    ul a, ul .dropdown-btn{
-      width: 60px;
-      height: 60px;
-      padding: 0;
-      border-radius: 0;
-      justify-content: center;
-    }
+  }
 
-    ul li span, ul li:first-child, .dropdown-btn svg:last-child{
-      display: none;
-    }
-
-    ul li .sub-menu.show{
-      position: fixed;
-      bottom: 60px;
-      left: 0;
-      box-sizing: border-box;
+  #sidebar {
       height: 60px;
       width: 100%;
-      background-color: var(--hover-clr);
+      border-right: none;
       border-top: 1px solid var(--line-clr);
-      display: flex;
-      justify-content: center;
+      padding: 0;
+      position: fixed;
+      top: unset;
+      bottom: 0;
 
-      > div{
-        overflow-x: auto;
+      > ul {
+          padding: 0;
+          display: grid;
+          grid-auto-columns: 60px;
+          grid-auto-flow: column;
+          align-items: center;
+          overflow-x: scroll;
       }
-      li{
-        display: inline-flex;
+
+      ul li {
+          height: 100%;
       }
-      a{
-        box-sizing: border-box;
-        padding: 1em;
-        width: auto;
-        justify-content: center;
+
+      ul a, ul .dropdown-btn {
+          width: 60px;
+          height: 60px;
+          padding: 0;
+          border-radius: 0;
+          justify-content: center;
       }
-    }
+
+      ul li span, ul li:first-child, .dropdown-btn svg:last-child {
+          display: none;
+      }
+
+      ul li .sub-menu.show {
+          position: fixed;
+          bottom: 60px;
+          left: 0;
+          box-sizing: border-box;
+          height: 60px;
+          width: 100%;
+          background-color: var(--hover-clr);
+          border-top: 1px solid var(--line-clr);
+          display: flex;
+          justify-content: center;
+
+          > div {
+              overflow-x: auto;
+          }
+
+          li {
+              display: inline-flex;
+          }
+
+          a {
+              box-sizing: border-box;
+              padding: 1em;
+              width: auto;
+              justify-content: center;
+          }
+      }
+  }
+
+  #sidebar .material-icons {
+    font-size: 24px;
+    color: var(--text-clr); /* Ensure text color is applied */
+  }
+
+  #sidebar ul li.active a .material-icons {
+      color: var(--accent-clr); /* Active icon remains highlighted */
+  }
+
+  #sidebar a:hover .material-icons {
+      color: var(--hover-clr); /* Add hover effect */
   }
 }
 

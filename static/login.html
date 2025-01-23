@@ -75,39 +75,29 @@
             <button type="button" onclick="login()">Login</button>
         </form>
         <div class="link">
-            Don't have an account? <a href="/static/signup.html">Sign Up</a>
+            Don't have an account? <a href="signup.html">Sign Up</a>
         </div>
         <div id="message" class="message"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "apikey",
-            authDomain: "authdomain",
-            projectId: "project-id",
-            storageBucket: "storagebucket",
-            messagingSenderId: "sender-id",
-            appId: "app-id",
-            measurementId: "measurement-id"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+    <script type="module">
+        import { auth } from '/static/firebase-config.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+    
         const messageDiv = document.getElementById("message");
-
-        async function login() {
+    
+        // Attach the login function to the global window object
+        window.login = async function login() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             try {
-                await auth.signInWithEmailAndPassword(email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 messageDiv.innerText = "Login successful! Redirecting...";
-                setTimeout(() => { window.location.href = "/static/index.html"; }, 1000);
+                setTimeout(() => { window.location.href = "index.html"; }, 1000);
             } catch (error) {
                 messageDiv.innerText = `Error: ${error.message}`;
             }
-        }
-    </script>
+        };
+    </script>    
 </body>
 </html>

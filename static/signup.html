@@ -26,7 +26,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             max-width: 400px;
-            text-align: center;
+            text-align: center
         }
         .auth-container h1 {
             margin-bottom: 20px;
@@ -34,14 +34,14 @@
         }
         form {
             display: flex;
-            flex-direction: column;
+            flex-direction: column
         }
         input {
             padding: 10px;
             margin-bottom: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 5px
         }
         button {
             background: #6a11cb;
@@ -51,18 +51,18 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s
         }
         button:hover {
-            background: #4a0fb8;
+            background: #4a0fb8
         }
         .link {
             margin-top: 10px;
-            font-size: 14px;
+            font-size: 14px
         }
         .link a {
             color: #6a11cb;
-            text-decoration: none;
+            text-decoration: none
         }
     </style>
 </head>
@@ -77,28 +77,17 @@
             <button type="button" onclick="signup()">Sign Up</button>
         </form>
         <div class="link">
-            Already have an account? <a href="/static/login.html">Login</a>
+            Already have an account? <a href="login.html">Login</a>
         </div>
         <div id="message" class="message"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "apikey",
-            authDomain: "authdomain",
-            projectId: "project-id",
-            storageBucket: "storagebucket",
-            messagingSenderId: "sender-id",
-            appId: "app-id",
-            measurementId: "measurement-id"
-        };
+    <script type="module">
+        import { auth } from './firebase-config.js';
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
 
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        const db = getFirestore();
         const messageDiv = document.getElementById("message");
 
         async function signup() {
@@ -108,16 +97,18 @@
             const phone = document.getElementById("phone").value;
 
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                await db.collection("users").doc(user.uid).set({
+
+                await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
-                    username: username,
-                    phone: phone,
+                    username,
+                    phone,
                     createdAt: new Date()
                 });
+
                 messageDiv.innerText = "Signup successful! Redirecting...";
-                setTimeout(() => { window.location.href = "/static/login.html"; }, 1000);
+                setTimeout(() => { window.location.href = "login.html"; }, 1000);
             } catch (error) {
                 messageDiv.innerText = `Error: ${error.message}`;
             }
