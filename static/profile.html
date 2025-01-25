@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script type="text/javascript" src="app.js" defer></script>
-    <!-- Firebase UMD SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script type="module" src="firebase-config.js"></script>
 </head>
 <body>
   <nav id="sidebar">
@@ -91,7 +88,6 @@
   </main>
 
   <button id="toggleButton" class="chatbox-toggle">💬</button>
-  <!-- Chatbox Container -->
   <div class="chatbox">
     <div class="chatbox-header">Assistant</div>
     <div id="chatBody" class="chatbox-messages">
@@ -103,74 +99,75 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
+<script type="module">
+  import { auth, db } from './firebase-config.js';
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+  import { getAuth, sendPasswordResetEmail, updateEmail} from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+
+
   document.addEventListener("DOMContentLoaded", () => {
-      const toggleButton = document.querySelector('.chatbox-toggle');
-      const chatbox = document.querySelector('.chatbox');
+    const toggleButton = document.querySelector('.chatbox-toggle');
+    const chatbox = document.querySelector('.chatbox');
 
-      if (toggleButton && chatbox) {
-          toggleButton.addEventListener('click', () => {
-              chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
-          });
-      } else {
-          console.error('Chatbox or toggle button not found in the DOM.');
-      }
-  });
-</script>
-
-  <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "apikey",
-            authDomain: "authdomain",
-            projectId: "project-id",
-            storageBucket: "storagebucket",
-            messagingSenderId: "sender-id",
-            appId: "app-id",
-            measurementId: "measurement-id"
-        };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    toggleButton.addEventListener('click', () => {
+      chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
+    });
 
     auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        if (userDoc.exists) {
-          const data = userDoc.data();
-          document.getElementById("username").textContent = data.username || "Not set";
-          document.getElementById("phone").textContent = data.phone || "Not set";
-          document.getElementById("email").textContent = user.email || "Not set";
+        if (user) {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById("username").textContent = data.username || "Not set";
+                document.getElementById("phone").textContent = data.phone || "Not set";
+                document.getElementById("email").textContent = user.email || "Not set";
+            } else {
+                console.error("No such document!");
+            }
+        } else {
+            alert("You are not logged in!");
+            window.location.href = "login.html";
         }
-      } else {
-        alert("You are not logged in!");
-        window.location.href = "login.html";
-      }
     });
 
     document.getElementById("resetPasswordBtn").addEventListener("click", () => {
-      const user = auth.currentUser;
-      auth.sendPasswordResetEmail(user.email).then(() => {
-        alert("Password reset email sent.");
-      }).catch((error) => {
-        console.error("Error resetting password:", error);
-      });
+      const email = auth.currentUser.email; // Ensure the user is logged in
+      if (email) {
+        sendPasswordResetEmail(auth, email)
+          .then(() => {
+            alert("Password reset email sent. Please check your registed email!");
+          })
+          .catch((error) => {
+            console.error("Error resetting password:", error.message);
+          });
+      } else {
+        alert("No email found for the current user.");
+      }
     });
 
     document.getElementById("changeEmailBtn").addEventListener("click", () => {
+      const user = auth.currentUser;
       const newEmail = prompt("Enter your new email:");
-      if (newEmail) {
-        const user = auth.currentUser;
-        user.updateEmail(newEmail).then(() => {
-          alert("Email updated successfully.");
-          document.getElementById("email").textContent = newEmail;
-        }).catch((error) => {
-          console.error("Error updating email:", error);
-        });
+
+      if (user && newEmail) {
+        updateEmail(user, newEmail)
+          .then(() => {
+            alert("Email updated successfully.");
+            document.getElementById("email").textContent = newEmail;
+          })
+          .catch((error) => {
+            console.error("Error updating email:", error.message);
+            alert(`Failed to update email: ${error.message}`);
+          });
+      } else if (!newEmail) {
+        alert("No email provided.");
+      } else {
+        alert("User not authenticated.");
       }
     });
-  </script>
+  });
+</script>
 </body>
 </html>
