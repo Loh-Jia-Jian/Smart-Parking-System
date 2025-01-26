@@ -86,33 +86,36 @@
         import { auth } from './firebase-config.js';
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
         import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
-
+    
         const db = getFirestore();
         const messageDiv = document.getElementById("message");
-
+    
         async function signup() {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const username = document.getElementById("username").value;
             const phone = document.getElementById("phone").value;
-
+    
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-
+    
                 await setDoc(doc(db, "users", user.uid), {
                     email: user.email,
                     username,
                     phone,
                     createdAt: new Date()
                 });
-
+    
                 messageDiv.innerText = "Signup successful! Redirecting...";
                 setTimeout(() => { window.location.href = "login.html"; }, 1000);
             } catch (error) {
                 messageDiv.innerText = `Error: ${error.message}`;
             }
         }
-    </script>
+    
+        // Attach the signup function to the window object
+        window.signup = signup;
+    </script>    
 </body>
 </html>

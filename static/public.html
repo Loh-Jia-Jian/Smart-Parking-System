@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Car Parking</title>
+  <title>Smart Car Parking - Public Parking</title>
   <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="app.js" defer></script>
 </head>
@@ -31,7 +31,7 @@
         <ul class="sub-menu">
           <div>
             <li><a href="indoor.html">Indoor</a></li>
-            <li  class="active"><a href="public.html">Public</a></li>
+            <li class="active"><a href="public.html">Public</a></li>
             <li><a href="evcharger.html">EV Charger</a></li>
             <li><a href="subscriptions.html">Subscriptions</a></li>
           </div>
@@ -75,7 +75,7 @@
       <h2>Public Parking</h2><br>
       <form>
         <label for="area">Choose an area:</label><br>
-        <select id="area" name="Venue">
+        <select id="area" name="area">
           <option value="kl">WP Kuala Lumpur</option>
           <option value="wangsa-maju">Wangsa Maju</option>
           <option value="ampang">Ampang</option>
@@ -83,49 +83,117 @@
           <option value="pj">Petaling Jaya</option>
         </select><br>
         <label for="slot-number">Slot number:</label><br>
-        <input type="text" id="slot-number" name="carplate" placeholder="A1234" maxlength="5" size="5"><br>
+        <input type="text" id="slot-number" name="slot-number" placeholder="A1234" maxlength="5" size="5"><br>
         <label for="carplate">Car Plate:</label><br>
         <input type="text" id="carplate" name="carplate" placeholder="ABC1234" maxlength="7" size="7"><br>
         <label for="date">Date:</label><br>
         <input type="datetime-local" id="datetime" name="datetime"><br>
-        <label for="duration">Duration (per hour):</label><br>
+        <label for="duration">Duration (hours):</label><br>
         <input type="number" id="duration" name="duration" min="1" max="24"><br>
         <label for="total">Total:</label><br>
         <input type="text" id="total" name="total" readonly><br>
-        <button type="button" onclick="">Pay now</button>
+        <button type="button" id="payNowButton">Pay now</button>
       </form>
     </div>
   </main>
 
-    <button id="toggleButton" class="chatbox-toggle">💬</button>
+  <button id="toggleButton" class="chatbox-toggle">💬</button>
 
-    <!-- Chatbox Container -->
-    <div class="chatbox">
-        <div class="chatbox-header">Assistant</div>
-        <div id="chatBody" class="chatbox-messages">
-          <div class="message assistant"><strong>Assistant:</strong> Hi! How can I assist you today?</div>
-      </div>
-      <div class="chatbox-input">
-          <input id="chatInput" type="text" placeholder="Type your message...">
-          <button onclick="sendMessage()">Send</button>
-      </div>
+  <div class="chatbox">
+    <div class="chatbox-header">Assistant</div>
+    <div id="chatBody" class="chatbox-messages">
+      <div class="message assistant"><strong>Assistant:</strong> Hi! How can I assist you today?</div>
     </div>
+    <div class="chatbox-input">
+      <input id="chatInput" type="text" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module">
+    import { auth, db } from './firebase-config.js';
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+
+    // Function to generate a unique transaction ID
+    function generateTransactionID() {
+      return 'txn-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    }
+
+    // Function to calculate total based on the selected area and duration
+    function calculateTotal(area, duration) {
+      const areaPricing = {
+        "kl": 5.0, // Price per hour
+        "wangsa-maju": 4.0,
+        "ampang": 6.0,
+        "cheras": 4.5,
+        "pj": 5.5
+      };
+      const pricePerHour = areaPricing[area] || 0.0;
+      return pricePerHour * duration;
+    }
+
+    // Function to save transaction data to Firestore
+    async function saveTransactionData(area, slotNumber, carPlate, date, duration, total) {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("You must be logged in to perform this action.");
+        return;
+      }
+
+      const transactionID = generateTransactionID();
+      const transactionPath = `users/${user.uid}/transactions/${transactionID}`;
       
-      document.addEventListener("DOMContentLoaded", () => {
-          const toggleButton = document.querySelector('.chatbox-toggle');
-          const chatbox = document.querySelector('.chatbox');
+      const transactionData = {
+        area: area,
+        slotNumber: slotNumber,
+        carPlate: carPlate,
+        date: date,
+        duration: duration,
+        total: total,
+        transactionID: transactionID
+      };
 
-          if (toggleButton && chatbox) {
-              toggleButton.addEventListener('click', () => {
-                  chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
-              });
-          } else {
-              console.error('Chatbox or toggle button not found in the DOM.');
-          }
-      });
-    </script>
+      try {
+        await setDoc(doc(db, transactionPath), transactionData);
+        alert('Transaction saved successfully!');
+      } catch (error) {
+        console.error('Error saving transaction:', error);
+        alert('Failed to save the transaction.');
+      }
+    }
+
+    // Event listener for calculating the total dynamically
+    document.getElementById('duration').addEventListener('input', () => {
+      const area = document.getElementById('area').value;
+      const duration = parseInt(document.getElementById('duration').value) || 0;
+      const total = calculateTotal(area, duration);
+      document.getElementById('total').value = `$${total.toFixed(2)}`;
+    });
+
+    // Event listener for the "Pay now" button
+    document.getElementById('payNowButton').addEventListener('click', () => {
+      const area = document.getElementById('area').value;
+      const slotNumber = document.getElementById('slot-number').value;
+      const carPlate = document.getElementById('carplate').value;
+      const date = document.getElementById('datetime').value;
+      const duration = parseInt(document.getElementById('duration').value) || 0;
+      const total = parseFloat(document.getElementById('total').value.replace('$', ''));
+
+      if (!area || !slotNumber || !carPlate || !date || duration <= 0 || isNaN(total)) {
+        alert("Please fill in all fields before proceeding.");
+        return;
+      }
+
+      saveTransactionData(area, slotNumber, carPlate, date, duration, total);
+    });
+
+    // Chatbox toggle functionality
+    const toggleButton = document.querySelector('.chatbox-toggle');
+    const chatbox = document.querySelector('.chatbox');
+    toggleButton.addEventListener('click', () => {
+      chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
+    });
+  </script>
 </body>
 </html>

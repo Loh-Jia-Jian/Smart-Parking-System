@@ -8,13 +8,13 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-
 // Your Firebase configuration
 const firebaseConfig = {
     apiKey: "apikey",
-    authDomain: "authdomain",
-    projectId: "project-id",
-    storageBucket: "storagebucket",
-    messagingSenderId: "sender-id",
-    appId: "app-id",
-    measurementId: "measurement-id"
-};
+            authDomain: "authdomain",
+            projectId: "project-id",
+            storageBucket: "storagebucket",
+            messagingSenderId: "sender-id",
+            appId: "app-id",
+            measurementId: "measurement-id"
+  };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

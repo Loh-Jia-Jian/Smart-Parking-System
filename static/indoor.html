@@ -88,40 +88,103 @@
         <input type="datetime-local" id="datetime" name="datetime"><br>
         <label for="total">Total:</label><br>
         <input type="text" id="total" name="total" readonly><br>
-        <button type="button" onclick="">Pay now</button>
+        <button type="button" id="payNowButton">Pay now</button>
       </form>
     </div>
   </main>
 
-    <button id="toggleButton" class="chatbox-toggle">💬</button>
+  <button id="toggleButton" class="chatbox-toggle">💬</button>
 
-    <!-- Chatbox Container -->
-    <div class="chatbox">
-        <div class="chatbox-header">Assistant</div>
-        <div id="chatBody" class="chatbox-messages">
-          <div class="message assistant"><strong>Assistant:</strong> Hi! How can I assist you today?</div>
-      </div>
-      <div class="chatbox-input">
-          <input id="chatInput" type="text" placeholder="Type your message...">
-          <button onclick="sendMessage()">Send</button>
-      </div>
+  <!-- Chatbox Container -->
+  <div class="chatbox">
+    <div class="chatbox-header">Assistant</div>
+    <div id="chatBody" class="chatbox-messages">
+      <div class="message assistant"><strong>Assistant:</strong> Hi! How can I assist you today?</div>
     </div>
+    <div class="chatbox-input">
+      <input id="chatInput" type="text" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module">
+    import { auth, db } from './firebase-config.js';
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+
+    // Function to generate a unique transaction ID
+    function generateTransactionID() {
+      return 'txn-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    }
+
+    // Function to calculate total based on the selected venue
+    function calculateTotal(venue) {
+      const venuePricing = {
+        "ipc": 5.0,
+        "suria-klcc": 10.0,
+        "klcc-cp": 8.0,
+        "genius-parking": 12.0,
+        "avenue-k": 7.0,
+      };
+      return venuePricing[venue] || 0.0;
+    }
+
+    // Function to save transaction data to Firestore
+    async function saveTransactionData(venue, carPlate, date, total) {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("You must be logged in to perform this action.");
+        return;
+      }
+
+      const transactionID = generateTransactionID();
+      const transactionPath = `users/${user.uid}/transactions/${transactionID}`;
       
-      document.addEventListener("DOMContentLoaded", () => {
-          const toggleButton = document.querySelector('.chatbox-toggle');
-          const chatbox = document.querySelector('.chatbox');
+      const transactionData = {
+        venue: venue,
+        carPlate: carPlate,
+        date: date,
+        total: total,
+        transactionID: transactionID
+      };
 
-          if (toggleButton && chatbox) {
-              toggleButton.addEventListener('click', () => {
-                  chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
-              });
-          } else {
-              console.error('Chatbox or toggle button not found in the DOM.');
-          }
-      });
-    </script>
+      try {
+        await setDoc(doc(db, transactionPath), transactionData);
+        alert('Transaction saved successfully!');
+      } catch (error) {
+        console.error('Error saving transaction:', error);
+        alert('Failed to save the transaction.');
+      }
+    }
+
+    // Event listener for venue selection to update the total
+    document.getElementById('Venue').addEventListener('change', () => {
+      const venue = document.getElementById('Venue').value;
+      const total = calculateTotal(venue);
+      document.getElementById('total').value = `$${total.toFixed(2)}`;
+    });
+
+    // Event listener for the "Pay now" button
+    document.getElementById('payNowButton').addEventListener('click', () => {
+      const venue = document.getElementById('Venue').value;
+      const carPlate = document.getElementById('carplate').value;
+      const date = document.getElementById('datetime').value;
+      const total = parseFloat(document.getElementById('total').value.replace('$', ''));
+
+      if (!venue || !carPlate || !date || isNaN(total)) {
+        alert("Please fill in all fields before proceeding.");
+        return;
+      }
+
+      saveTransactionData(venue, carPlate, date, total);
+    });
+
+    // Chatbox toggle functionality
+    const toggleButton = document.querySelector('.chatbox-toggle');
+    const chatbox = document.querySelector('.chatbox');
+    toggleButton.addEventListener('click', () => {
+      chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
+    });
+  </script>
 </body>
 </html>
