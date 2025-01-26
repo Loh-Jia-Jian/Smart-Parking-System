@@ -172,6 +172,115 @@ main p{
   margin-top: 5px;
   margin-bottom: 15px;
 }
+/* Chatbox */
+.chatbox-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chatbox-toggle:hover {
+  background-color: #0056b3;
+}
+
+.chatbox {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 400px;
+  max-height: 500px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+}
+
+.chatbox-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.chatbox-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 80%;
+  display: inline-block;
+  word-wrap: break-word;
+}
+
+.message.user {
+  background-color: #007bff; /* Blue color for the user */
+  color: #fff;
+  text-align: right;
+  align-self: flex-end;
+  margin-left: auto; /* Push user messages to the right */
+  margin-right: 10px;
+}
+
+.message.assistant {
+  background-color: #e0e0e0; /* Gray color for the assistant */
+  color: #333;
+  text-align: left;
+  align-self: flex-start;
+  margin-right: auto; /* Push assistant messages to the left */
+  margin-left: 10px;
+}
+
+.chatbox-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chatbox-input input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.chatbox-input button {
+  margin-left: 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chatbox-input button:hover {
+  background-color: #0056b3;
+}
+/* End of chatbox */
 .container{
   border: 1px solid var(--line-clr);
   border-radius: 1em;
