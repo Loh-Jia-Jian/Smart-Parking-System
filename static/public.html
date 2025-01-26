@@ -123,11 +123,11 @@
     // Function to calculate total based on the selected area and duration
     function calculateTotal(area, duration) {
       const areaPricing = {
-        "kl": 5.0, // Price per hour
-        "wangsa-maju": 4.0,
-        "ampang": 6.0,
-        "cheras": 4.5,
-        "pj": 5.5
+        "kl": 1.0, // Price per hour
+        "wangsa-maju": 0.6,
+        "ampang": 0.65,
+        "cheras": 0.5,
+        "pj": 1.0
       };
       const pricePerHour = areaPricing[area] || 0.0;
       return pricePerHour * duration;
