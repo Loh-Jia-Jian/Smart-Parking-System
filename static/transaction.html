@@ -177,6 +177,58 @@
         chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
       });
     });
+    async function sendMessage() {
+      const inputElement = document.getElementById("chatInput");
+      const chatBody = document.getElementById("chatBody");
+
+      const userMessage = inputElement.value.trim();
+      if (!userMessage) {
+        return; // Do nothing if input is empty
+      }
+
+      // Append user message to chatbox
+      const userMessageElement = document.createElement("div");
+      userMessageElement.className = "message user";
+      userMessageElement.innerHTML = `<strong>You:</strong> ${userMessage}`;
+      chatBody.appendChild(userMessageElement);
+
+      // Clear input field
+      inputElement.value = "";
+
+      // Scroll to the bottom of the chatbox
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      try {
+        // Send user message to the backend via POST request
+        const response = await fetch("http://127.0.0.1:8000/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ question: userMessage }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Append assistant's response to chatbox
+        const assistantMessageElement = document.createElement("div");
+        assistantMessageElement.className = "message assistant";
+        assistantMessageElement.innerHTML = `<strong>Assistant:</strong> ${data.answer}`;
+        chatBody.appendChild(assistantMessageElement);
+        chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the latest message
+      } catch (error) {
+        console.error("Error sending message:", error);
+        const errorMessageElement = document.createElement("div");
+        errorMessageElement.className = "message assistant";
+        errorMessageElement.innerHTML = `<strong>Assistant:</strong> Sorry, something went wrong. Please try again.`;
+        chatBody.appendChild(errorMessageElement);
+        chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the latest message
+      }
+    }
   </script>
 </body>
 </html>
