@@ -1,31 +1,27 @@
 # Core FastAPI and its dependencies
-fastapi==0.100.0
-uvicorn==0.22.0
+fastapi==0.111.0
+uvicorn==0.30.0
 
 # Firebase Admin SDK for Firestore integration
-firebase-admin==6.1.0
+firebase-admin==6.6.0
 
 # LangChain and related dependencies for RAG system
-langchain==0.0.263
-langchain-community==0.2.1
-langchain-openai==0.1.0
-faiss-cpu==1.7.4  # FAISS for vector stores
+langchain==0.3.13
+langchain-core==0.3.28
+langchain-community==0.3.13
+langchain-openai==0.2.14
+faiss-cpu==1.9.0.post1   # FAISS for vector stores
 
 # OpenAI API for embeddings and chat models
-openai==0.28.0
+openai==1.58.1
 
 # Python client library for Firestore and HTTP requests
-google-cloud-firestore==2.11.0
-requests==2.31.0
+google-cloud-firestore==2.20.0
+requests==2.32.3
 
 # Async HTTP client for better performance
-httpx==0.24.1
-
-# For running Python scripts and debugging
-watchdog==3.0.0
+httpx==0.28.1
 
 # For Docker-friendly deployment and general Python requirements
-python-dotenv==1.0.0
+python-dotenv==1.0.1
 
-# Optional: For testing (remove if not needed)
-pytest==7.4.0
