@@ -6,6 +6,10 @@ First cd to your directory path and clone the repo to the path using:
 ```
 git clone https://github.com/Loh-Jia-Jian/Smart-Parking-System.git
 ```
+Go to the directory
+```
+cd Smart-Parking-System
+```
 
 Create the docker image:
 ```
