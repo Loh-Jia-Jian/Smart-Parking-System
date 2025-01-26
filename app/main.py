@@ -53,4 +53,4 @@ def ask_question(question: Question):
         answer = rag_system.qa_system.run(question.question)
         return Answer(answer=answer)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 :root{
   --base-clr: #11121a;
   --line-clr: #42434a;
@@ -210,6 +210,54 @@ main p{
   margin-left: 10px; /* Space between buttons */
 }
 
+/* Form Enhancements */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+form label {
+  font-weight: 500;
+  color: var(--text-clr);
+}
+
+form input, form select, form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--line-clr);
+  border-radius: 5px;
+  background-color: var(--base-clr);
+  color: var(--text-clr);
+  transition: border-color 0.3s ease;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  border-color: var(--accent-clr);
+  outline: none;
+}
+
+form button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: var(--accent-clr);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+  background-color: #4a50f7;
+  transform: translateY(-2px);
+}
+
+form button:active {
+  transform: translateY(0);
+}
 
 @media(max-width: 800px) {
   body {
@@ -290,125 +338,6 @@ main p{
   }
 
   #sidebar .material-icons {
-    font-size: 24px;
-    color: var(--text-clr); /* Ensure text color is applied */
-  }
-
-  #sidebar ul li.active a .material-icons {
-      color: var(--accent-clr); /* Active icon remains highlighted */
-  }
-
-  #sidebar a:hover .material-icons {
-      color: var(--hover-clr); /* Add hover effect */
+    font-size: 24px
   }
 }
-
-/* Chatbox */
-.chatbox-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.chatbox-toggle:hover {
-  background-color: #0056b3;
-}
-
-.chatbox {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 400px;
-  max-height: 500px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: none;
-  flex-direction: column;
-}
-
-.chatbox-header {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.chatbox-messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  font-size: 14px;
-  background-color: #f9f9f9;
-}
-
-.message {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 15px;
-  max-width: 80%;
-  display: inline-block;
-  word-wrap: break-word;
-}
-
-.message.user {
-  background-color: #007bff; /* Blue color for the user */
-  color: #fff;
-  text-align: right;
-  align-self: flex-end;
-  margin-left: auto; /* Push user messages to the right */
-  margin-right: 10px;
-}
-
-.message.assistant {
-  background-color: #e0e0e0; /* Gray color for the assistant */
-  color: #333;
-  text-align: left;
-  align-self: flex-start;
-  margin-right: auto; /* Push assistant messages to the left */
-  margin-left: 10px;
-}
-
-.chatbox-input {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-
-.chatbox-input input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.chatbox-input button {
-  margin-left: 5px;
-  padding: 8px 12px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.chatbox-input button:hover {
-  background-color: #0056b3;
-}
-/* End of chatbox */

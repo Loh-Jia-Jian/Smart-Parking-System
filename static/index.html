@@ -6,6 +6,107 @@
   <title>Smart Car Parking</title>
   <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="app.js" defer></script>
+  <style>
+    .metrics-container {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .metric-card {
+      width: 25%; /* 25% width for larger screens */
+      min-width: 200px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f4f4f9;
+      text-align: center;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .metric-card h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .metric-card p {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    /* Quick Links styling */
+    .quick-links-container {
+      margin: 20px 0;
+    }
+
+    .quick-links-container h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .quick-links {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .quick-link {
+      text-decoration: none;
+      color: inherit;
+      width: 25%; /* 25% width for larger screens */
+      min-width: 200px;
+    }
+
+    .link-card {
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      background-color: #4a50f7;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .link-card h4 {
+      margin: 0 0 10px 0;
+      font-size: 1.2em;
+    }
+
+    .link-card p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #000000;
+    }
+
+    .link-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Responsive styling for max-width 800px */
+    @media (max-width: 800px) {
+      .metrics-container,
+      .quick-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .metric-card,
+      .quick-link {
+        width: 90%; /* Reduce size to 90% of the screen width */
+      }
+    }
+
+    /* Responsive styling for max-width 1200px */
+    @media (max-width: 1200px) {
+      .metric-card,
+      .quick-link {
+        width: 45%; /* Reduce size to 45% of the screen width for medium screens */
+      }
+    }
+  </style>
 </head>
 <body>
   <nav id="sidebar">
@@ -71,18 +172,55 @@
     </ul>
   </nav>
   <main>
-    <h2>Welcome, User</h2>
-    <div class="container">
-      <h2>Welcome, username</h2>
-      <p></p>
+    <h2>Welcome, User</h2><br>
+    <!-- Metrics Section -->
+    <div class="metrics-container">
+      <!-- Total Spending -->
+      <div class="metric-card">
+        <h3>Total Spending</h3>
+        <p id="totalSpending">$0.00</p>
+      </div>
+
+      <!-- Active EV Charger Bookings -->
+      <div class="metric-card">
+        <h3>Active EV Charger Bookings</h3>
+        <p id="activeEvBookings">0</p>
+      </div>
+
+      <!-- Promotions -->
+      <div class="metric-card">
+        <h3>Promotions</h3>
+        <p id="promotions">No active promotions</p>
+      </div>
     </div>
-    <div class="container">
-      <h2>Example Heading</h2>
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Hic aliquid corrupti, tenetur fuga magnam necessitatibus blanditiis quod sint excepturi laborum esse alias labore molestias adipisci, nostrum corporis ex maiores quis dolore quidem asperiores odio ad fugit eos! Delectus modi quas ipsa deleniti consequuntur nihil, hic in ipsum exercitationem blanditiis natus, ex, expedita eos. Excepturi quidem harum hic nam magnam deserunt illum quis dolorum eos ipsum ut natus sapiente sit, officia obcaecati assumenda tempore molestias? In fugiat iure laboriosam quasi, eum suscipit, harum autem saepe ut, soluta aspernatur ducimus eos magnam quidem officiis. Laboriosam nemo explicabo delectus, et quos vero cum?</p>
-    </div>
-    <div class="container">
-      <h2>Lorem Ipsum</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore repudiandae labore veniam reprehenderit voluptatum, laboriosam perferendis fuga, dolore quam quas nostrum totam sunt esse expedita. Vero distinctio omnis accusantium. Quisquam ullam saepe cupiditate magni numquam totam perspiciatis error velit, debitis veniam labore possimus aut sunt, reiciendis natus. Impedit provident voluptatum nulla fuga error a magnam, corporis natus aperiam fugit quod perferendis quos quaerat, numquam sequi doloribus tenetur dolorem voluptate deleniti, odio minus. Deserunt eius quasi odit voluptas unde voluptatum dicta cumque exercitationem soluta beatae porro distinctio, delectus officiis, nobis officia ullam necessitatibus, rem natus corrupti nam! Est, nihil molestias fugiat sed quae enim commodi expedita soluta tempore molestiae fuga adipisci rem esse voluptates quos, ut quasi sunt ad a perspiciatis ducimus maxime animi. Adipisci officia doloribus magni alias maiores ab quo, eos mollitia sint esse. Labore odio, architecto nihil quaerat soluta blanditiis impedit laudantium esse officiis dolorum dolore libero, id sequi minima incidunt eum facilis itaque distinctio. Voluptas doloremque minus reiciendis ex beatae laudantium cum sequi repellat blanditiis molestiae. Cumque, libero nulla! Sit, quisquam magni dolore consectetur odio impedit adipisci voluptas ab, laboriosam autem nihil nam est ipsa excepturi obcaecati eos neque! Omnis similique qui veritatis. Repellat magni dolorem, facilis eaque, harum molestias, delectus est adipisci laudantium velit optio blanditiis debitis? Tenetur totam maiores animi officiis eligendi expedita nemo corrupti distinctio. Cum libero soluta beatae doloribus sit, repellendus nobis vel obcaecati velit dolorem voluptate magnam inventore quas pariatur quam reprehenderit molestiae hic sunt dicta illo amet quis magni accusamus sequi? Vel quis, dolores iusto suscipit excepturi laboriosam repellat consectetur! Maiores deserunt, pariatur nesciunt consequuntur recusandae minima assumenda consequatur inventore natus debitis illo velit voluptatum necessitatibus qui aspernatur illum impedit magni dignissimos ea, molestias tempora corporis, asperiores iusto possimus. Libero expedita aspernatur officia totam dolorum culpa, minus, alias adipisci eligendi suscipit voluptates, magnam laudantium? Inventore cupiditate perspiciatis mollitia excepturi, voluptatibus ducimus expedita provident. Dicta, odit. Odio, qui repudiandae! Maiores dignissimos, magnam deleniti reprehenderit ex cum ea eveniet placeat quae, ad at perspiciatis nobis corporis doloribus voluptatem nulla aliquam sunt accusamus facere quaerat necessitatibus ipsa! Nam quisquam dicta minima commodi nostrum. Exercitationem necessitatibus optio cumque voluptate modi amet consequuntur similique ex inventore explicabo doloremque esse sed sequi nemo rem, nostrum ullam. Totam repellat ut ipsa quisquam rem, nulla, suscipit debitis atque earum quis voluptates quaerat exercitationem architecto repellendus placeat, tenetur incidunt distinctio consectetur reiciendis minima officiis aliquam? Ipsum sequi hic officia iste a. Blanditiis, dicta! Eveniet molestias ut natus odio fugiat cum necessitatibus, architecto, quo a quisquam autem porro explicabo ipsam, nostrum deserunt possimus expedita eum est corporis quibusdam cupiditate! Fugiat, quaerat saepe. Harum modi eligendi beatae alias fugiat. Nostrum cum nisi saepe dicta iste cupiditate, deserunt omnis, doloremque a distinctio eum rem adipisci ab? Sapiente, dicta ipsam blanditiis earum omnis necessitatibus temporibus, excepturi accusantium delectus quo quod iusto ad aliquam nemo ducimus ab nobis inventore sequi veritatis? Nulla, dolorem. Voluptas, obcaecati non facilis repellendus ratione officiis veritatis, modi culpa rerum placeat voluptatum quia ex? Officia quos dolorum repellat deserunt voluptas praesentium.</p>
+
+    <div class="quick-links-container">
+      <h3>Quick Links</h3>
+      <div class="quick-links">
+        <!-- Link to Indoor Parking -->
+        <a href="indoor.html" class="quick-link">
+          <div class="link-card">
+            <h4>Indoor Parking</h4>
+            <p>Book or manage indoor parking slots.</p>
+          </div>
+        </a>
+    
+        <!-- Link to Public Parking -->
+        <a href="public.html" class="quick-link">
+          <div class="link-card">
+            <h4>Public Parking</h4>
+            <p>Find or manage public parking locations.</p>
+          </div>
+        </a>
+    
+        <!-- Link to Transactions -->
+        <a href="transaction.html" class="quick-link">
+          <div class="link-card">
+            <h4>Transactions</h4>
+            <p>View or manage your transaction history.</p>
+          </div>
+        </a>
+      </div>
     </div>
   </main>
 
@@ -100,21 +238,66 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      
+    <script type="module">
+      import { auth, db } from './firebase-config.js';
+      import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+    
       document.addEventListener("DOMContentLoaded", () => {
-          const toggleButton = document.querySelector('.chatbox-toggle');
-          const chatbox = document.querySelector('.chatbox');
-
-          if (toggleButton && chatbox) {
-              toggleButton.addEventListener('click', () => {
-                  chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
-              });
+        const toggleButton = document.querySelector('.chatbox-toggle');
+        const chatbox = document.querySelector('.chatbox');
+        const welcomeElement = document.querySelector('h2'); // Target the `Welcome, username` heading
+    
+        // Chatbox toggle functionality
+        if (toggleButton && chatbox) {
+          toggleButton.addEventListener('click', () => {
+            chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
+          });
+        } else {
+          console.error('Chatbox or toggle button not found in the DOM.');
+        }
+    
+        // Use onAuthStateChanged to wait for authentication initialization
+        auth.onAuthStateChanged(async (user) => {
+          if (user) {
+            // Fetch the username from Firestore
+            try {
+              const userRef = doc(db, `users/${user.uid}`);
+              const userSnap = await getDoc(userRef);
+    
+              if (userSnap.exists()) {
+                const username = userSnap.data().username || "User";
+                welcomeElement.textContent = `Welcome, ${username}`;
+              } else {
+                console.error("No such user document!");
+                welcomeElement.textContent = `Welcome, User`;
+              }
+            } catch (error) {
+              console.error("Error fetching user data:", error);
+              welcomeElement.textContent = `Welcome, User`;
+            }
           } else {
-              console.error('Chatbox or toggle button not found in the DOM.');
+            // Redirect to login page if no user is logged in
+            alert("You must be logged in to access this page.");
+            window.location.href = "login.html";
           }
+        });
+    
+        // Example API Data for metrics (replace with real API/Firebase calls)
+        const totalSpendingElement = document.getElementById('totalSpending');
+        const activeEvBookingsElement = document.getElementById('activeEvBookings');
+        const promotionsElement = document.getElementById('promotions');
+    
+        const mockData = {
+          totalSpending: 125.75,
+          activeEvBookings: 3,
+          promotions: "5% discount on EV Charger Bookings!"
+        };
+    
+        // Update metrics dynamically
+        totalSpendingElement.textContent = `$${mockData.totalSpending.toFixed(2)}`;
+        activeEvBookingsElement.textContent = `${mockData.activeEvBookings}`;
+        promotionsElement.textContent = `${mockData.promotions}`;
       });
-    </script>
+    </script>    
 </body>
 </html>
