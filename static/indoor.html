@@ -76,11 +76,17 @@
       <form>
         <label for="Venue">Choose a Parking Venue:</label><br>
         <select id="Venue" name="Venue">
-          <option value="ipc">IPC Shopping Centre</option>
+          <option value="ipc-shopping-centre">IPC Shopping Centre</option>
           <option value="suria-klcc">Suria KLCC Basement Parking</option>
-          <option value="klcc-cp">Kuala Lumpur Convention Centre Car Park</option>
-          <option value="genius-parking">Genius Parking @ Soho Suites KLCC</option>
+          <option value="klcc-car-park">Kuala Lumpur Convention Centre Car Park</option>
+          <option value="genius-parking-soho">Genius Parking @ Soho Suites KLCC</option>
           <option value="avenue-k">Avenue K Parking</option>
+          <option value="bayz-parking">Bayz Parking</option>
+          <option value="parksafe-open-carpark">ParkSafe Open Carpark</option>
+          <option value="open-space-parking">Open Space Parking @ Jalan Perak</option>
+          <option value="parking-lot-195">Parking Lot 195 @ Jalan Pinang</option>
+          <option value="platinum-park-open">Platinum Park Open Carpark</option>
+          <option value="genius-parking-vortex">Genius Parking - Vortex @ KLCC</option>
         </select><br>
         <label for="carplate">Car Plate:</label><br>
         <input type="text" id="carplate" name="carplate" placeholder="ABC1234" maxlength="7" size="7"><br>
@@ -120,11 +126,17 @@
     // Function to calculate total based on the selected venue
     function calculateTotal(venue) {
       const venuePricing = {
-        "ipc": 5.0,
-        "suria-klcc": 10.0,
-        "klcc-cp": 8.0,
-        "genius-parking": 12.0,
-        "avenue-k": 7.0,
+        "ipc-shopping-centre": 1.0,
+        "suria-klcc": 5.0,
+        "klcc-car-park": 5.0,
+        "genius-parking-soho": 5.0,
+        "avenue-k": 5.0,
+        "bayz-parking": 4.0,
+        "parksafe-open-carpark": 3.0,
+        "open-space-parking": 14.0,
+        "parking-lot-195": 5.0,
+        "platinum-park-open": 4.0,
+        "genius-parking-vortex": 4.0
       };
       return venuePricing[venue] || 0.0;
     }
