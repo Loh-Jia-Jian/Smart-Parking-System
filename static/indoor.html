@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Car Parking</title>
   <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="firebase-config.js" defer></script>
   <script type="text/javascript" src="app.js" defer></script>
 </head>
 <body>
@@ -73,28 +74,37 @@
   <main>
     <div class="container">
       <h2>Indoor Parking</h2><br>
-      <form>
-        <label for="Venue">Choose a Parking Venue:</label>
-        <select id="Venue" name="Venue">
+      
+      <!-- Display Real-Time Parking Slot Status -->
+      <h3>Available Slots</h3>
+      <div id="parking-status"></div>
+
+      <h3>Book a Parking Slot</h3>
+      <form id="bookingForm">
+        <label for="venue">Choose a Venue:</label>
+        <select id="venue" name="venue">
           <option value="ipc-shopping-centre">IPC Shopping Centre</option>
           <option value="suria-klcc">Suria KLCC Basement Parking</option>
           <option value="klcc-car-park">Kuala Lumpur Convention Centre Car Park</option>
           <option value="genius-parking-soho">Genius Parking @ Soho Suites KLCC</option>
           <option value="avenue-k">Avenue K Parking</option>
           <option value="bayz-parking">Bayz Parking</option>
-          <option value="parksafe-open-carpark">ParkSafe Open Carpark</option>
-          <option value="open-space-parking">Open Space Parking @ Jalan Perak</option>
-          <option value="parking-lot-195">Parking Lot 195 @ Jalan Pinang</option>
-          <option value="platinum-park-open">Platinum Park Open Carpark</option>
-          <option value="genius-parking-vortex">Genius Parking - Vortex @ KLCC</option>
         </select><br>
+
+        <label for="slot-number">Slot Number:</label>
+        <input type="text" id="slot-number" name="slot-number" placeholder="Enter Slot (e.g. A1)" required><br>
+        
         <label for="carplate">Car Plate:</label>
-        <input type="text" id="carplate" name="carplate" placeholder="ABC1234" maxlength="7" size="7"><br>
-        <label for="date">Date:</label>
-        <input type="datetime-local" id="datetime" name="datetime"><br>
-        <label for="total">Total:</label>
-        <input type="text" id="total" name="total" readonly><br>
-        <button type="button" id="payNowButton">Pay now</button>
+        <input type="text" id="carplate" name="carplate" placeholder="ABC1234" maxlength="7" required><br>
+
+        <button type="button" id="bookParking">Book Now</button>
+      </form>
+
+      <h3>Checkout</h3>
+      <form id="checkoutForm">
+        <label for="checkout-slot">Enter Your Slot Number:</label>
+        <input type="text" id="checkout-slot" placeholder="Enter Slot (e.g. A1)" required><br>
+        <button type="button" id="checkout">Checkout</button>
       </form>
     </div>
   </main>
@@ -115,80 +125,82 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="module">
-    import { auth, db } from './firebase-config.js';
-    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
+    import { auth, realtimeDB, ref, onValue, update } from './firebase-config.js';
 
-    // Function to generate a unique transaction ID
-    function generateTransactionID() {
-      return 'txn-' + Date.now() + '-' + Math.floor(Math.random() * 1000000);
+    function loadParkingSlots() {
+      const slotsRef = ref(realtimeDB, "parking_slots/indoor");
+
+      onValue(slotsRef, (snapshot) => {
+        const data = snapshot.val();
+        let parkingDisplay = document.getElementById("parking-status");
+        parkingDisplay.innerHTML = "";
+
+        if (data) {
+          Object.keys(data).forEach((slot) => {
+            let slotInfo = data[slot];
+            let slotStatus = slotInfo.status === "occupied" ? "🚗 Occupied" : "🟢 Available";
+            
+            let slotElement = document.createElement("div");
+            slotElement.innerHTML = `<strong>${slot}</strong>: ${slotStatus}`;
+            parkingDisplay.appendChild(slotElement);
+          });
+        } else {
+          parkingDisplay.innerHTML = "No parking slots available.";
+        }
+      });
     }
 
-    // Function to calculate total based on the selected venue
-    function calculateTotal(venue) {
-      const venuePricing = {
-        "ipc-shopping-centre": 1.0,
-        "suria-klcc": 5.0,
-        "klcc-car-park": 5.0,
-        "genius-parking-soho": 5.0,
-        "avenue-k": 5.0,
-        "bayz-parking": 4.0,
-        "parksafe-open-carpark": 3.0,
-        "open-space-parking": 14.0,
-        "parking-lot-195": 5.0,
-        "platinum-park-open": 4.0,
-        "genius-parking-vortex": 4.0
-      };
-      return venuePricing[venue] || 0.0;
-    }
+loadParkingSlots();
 
-    // Function to save transaction data to Firestore
-    async function saveTransactionData(venue, carPlate, date, total) {
-      const user = auth.currentUser;
-      if (!user) {
-        alert("You must be logged in to perform this action.");
+    // Function to Book a Parking Slot
+    document.getElementById("bookParking").addEventListener("click", function () {
+      const venue = document.getElementById("venue").value;
+      const slot = document.getElementById("slot-number").value.trim();
+      const carPlate = document.getElementById("carplate").value.trim();
+      const userID = auth.currentUser ? auth.currentUser.uid : null;
+
+      if (!userID) {
+        alert("Please log in to book a parking slot.");
         return;
       }
 
-      const transactionID = generateTransactionID();
-      const transactionPath = `users/${user.uid}/transactions/${transactionID}`;
-      
-      const transactionData = {
-        venue: venue,
-        carPlate: carPlate,
-        date: date,
-        total: total,
-        transactionID: transactionID
-      };
-
-      try {
-        await setDoc(doc(db, transactionPath), transactionData);
-        alert('Transaction saved successfully!');
-      } catch (error) {
-        console.error('Error saving transaction:', error);
-        alert('Failed to save the transaction.');
+      if (!slot || !carPlate || !venue) {
+        alert("Please enter all details.");
+        return;
       }
-    }
 
-    // Event listener for venue selection to update the total
-    document.getElementById('Venue').addEventListener('change', () => {
-      const venue = document.getElementById('Venue').value;
-      const total = calculateTotal(venue);
-      document.getElementById('total').value = `$${total.toFixed(2)}`;
+      const slotRef = ref(realtimeDB, `parking_slots/indoor/${venue}/${slot}`);
+
+      update(slotRef, {
+        status: "occupied",
+        carPlate: carPlate,
+        userID: userID,
+        venue: venue
+      })
+      .then(() => alert(`Parking slot booked successfully at ${venue}!`))
+      .catch((error) => console.error("Error booking slot:", error));
     });
 
-    // Event listener for the "Pay now" button
-    document.getElementById('payNowButton').addEventListener('click', () => {
-      const venue = document.getElementById('Venue').value;
-      const carPlate = document.getElementById('carplate').value;
-      const date = document.getElementById('datetime').value;
-      const total = parseFloat(document.getElementById('total').value.replace('$', ''));
+    // Function to Checkout and Release the Slot
+    document.getElementById("checkout").addEventListener("click", function () {
+      const venue = document.getElementById("venue").value;
+      const slot = document.getElementById("checkout-slot").value.trim();
 
-      if (!venue || !carPlate || !date || isNaN(total)) {
-        alert("Please fill in all fields before proceeding.");
+      if (!slot || !venue) {
+        alert("Please enter your slot number and venue.");
         return;
       }
 
-      saveTransactionData(venue, carPlate, date, total);
+      const slotRef = ref(realtimeDB, `parking_slots/indoor/${venue}/${slot}`);
+
+      update(slotRef, {
+        status: "available",
+        carPlate: null,
+        userID: null,
+        venue: venue
+      })
+      .then(() => alert(`Checkout successful, slot at ${venue} is now available.`))
+      .catch((error) => console.error("Error checking out:", error));
     });
 
     // Chatbox toggle functionality
