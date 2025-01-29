@@ -124,3 +124,22 @@ class RAG:
     def start_listener(self):
         listener_thread = Thread(target=self.monitor_database, daemon=True)
         listener_thread.start()
+
+def fetch_parking_data():
+        """Fetch real-time parking slot data from Firebase."""
+        db = firestore.client()
+        slots_ref = db.collection("parking_slots")
+        docs = slots_ref.stream()
+
+        slot_texts = []
+        for doc in docs:
+            data = doc.to_dict()
+            slot_text = (
+                f"Slot ID: {doc.id}\n"
+                f"Status: {data.get('status', 'N/A')}\n"
+                f"Car Plate: {data.get('carPlate', 'N/A')}\n"
+                "----------------------"
+            )
+            slot_texts.append(slot_text)
+
+        return slot_texts

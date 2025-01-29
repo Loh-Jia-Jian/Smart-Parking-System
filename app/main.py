@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-from app.rag import RAG
+from app.rag import RAG, fetch_parking_data
 
 # load env variable
 dotenv_path = Path('system.env')
@@ -51,6 +51,19 @@ class Answer(BaseModel):
 def ask_question(question: Question):
     try:
         answer = rag_system.qa_system.run(question.question)
+        return Answer(answer=answer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+@app.post("/ask", response_model=Answer)
+def ask_question(question: Question):
+    try:
+        parking_data = fetch_parking_data()
+        parking_context = "\n".join(parking_data)
+
+        full_context = f"{parking_context}\n\n{rag_system.qa_system.vector_store}"
+        answer = rag_system.qa_system.run(question.question, context=full_context)
+
         return Answer(answer=answer)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
