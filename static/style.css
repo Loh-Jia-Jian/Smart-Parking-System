@@ -332,7 +332,7 @@ form label {
 }
 
 form input, form select, form textarea {
-  width: 100%;
+  width: 80%;
   padding: 10px;
   font-size: 1rem;
   border: 1px solid var(--line-clr);
@@ -349,6 +349,7 @@ form input:focus, form select:focus, form textarea:focus {
 
 form button {
   padding: 10px 15px;
+  width: 20%;
   font-size: 1rem;
   font-weight: bold;
   color: #fff;
@@ -448,5 +449,8 @@ form button:active {
 
   #sidebar .material-icons {
     font-size: 24px
+  }
+  form button {
+  width: 30%;
   }
 }
