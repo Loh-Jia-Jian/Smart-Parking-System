@@ -1,4 +1,4 @@
-# Smart Parking System
+# Car Park System
 This project is for SMJE4383 Advanced Programming Project. This web application is developed using RAG to solve real-life applications with a relatively low cost of training models.
 
 ## Start guide
