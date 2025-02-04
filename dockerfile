@@ -16,9 +16,5 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Define environment variable
-ENV DATA_DIRECTORY=data
-ENV OPENAI_API_KEY=yourapikey
-
 # Command to run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
