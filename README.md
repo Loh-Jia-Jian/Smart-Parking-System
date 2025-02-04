@@ -12,7 +12,9 @@ cd Smart-Parking-System
 ```
 ### Step 3: Add the require API key on these file (system.env, firebase-config.js, firebase-adminsdk.json)
 **system.env**
-```OPENAI_API_KEY = <your-api-key>```
+```
+OPENAI_API_KEY = <your-api-key>
+```
 **firebase-config.js**
 ```
 const firebaseConfig = {
