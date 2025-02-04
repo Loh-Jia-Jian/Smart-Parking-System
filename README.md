@@ -2,11 +2,11 @@
 This project is for SMJE4383 Advanced Programming Project. This web application is developed using RAG to solve real-life applications with a relatively low cost of training models.
 
 ## Start guide
-Step 1: First cd to your directory path and clone the repo to the path using:
+### Step 1: First cd to your directory path and clone the repo to the path using:
 ```
 git clone https://github.com/Loh-Jia-Jian/Smart-Parking-System.git
 ```
-Step 2: Go to the directory
+### Step 2: Go to the directory
 ```
 cd Smart-Parking-System
 ```
