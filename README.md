@@ -25,4 +25,4 @@ docker run -p 8000:8000 <your-application-name>
 Command to run the system on terminal
 ```
 uvicorn app.main:app --reload
-```
+```"# smart_parking_system" 
